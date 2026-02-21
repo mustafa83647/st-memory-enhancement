@@ -11,7 +11,7 @@ const bgcg = '#de81f1'
 // const bgcg = 'var(--SmartThemeUserMesBlurTintColor)'
 const tc = '#fff'
 
-export async function newPopupConfirm(text, cancelText = 'Cancel', confirmText = 'Confirm', id = '', dontRemindText = null, alwaysConfirmText = null) {
+export async function newPopupConfirm(text, cancelText = 'إلغاء', confirmText = 'تأكيد', id = '', dontRemindText = null, alwaysConfirmText = null) {
     if (id && disabledPopups[id]) {
         return Promise.resolve('dont_remind_active'); // Permanently disabled, don't show
     }
@@ -76,7 +76,7 @@ export class PopupConfirm {
         }
     }
 
-    async show(message = 'Are you sure?', cancelText = 'Cancel', confirmText = 'Confirm', id = null, dontRemindText = null, alwaysConfirmText = null) {
+    async show(message = 'هل أنت متأكد؟', cancelText = 'إلغاء', confirmText = 'تأكيد', id = null, dontRemindText = null, alwaysConfirmText = null) {
         this._text = message;
         this.id = id; // Store the ID
 
@@ -119,10 +119,6 @@ export class PopupConfirm {
         messageEl.style.color = tc;
         messageEl.style.fontWeight = 'bold';
         messageEl.style.gap = '10px';
-
-        messageIcon.style.fontSize = '1.3rem';
-        messageIcon.style.padding = '0'
-        messageIcon.style.margin = '0'
 
         this.messageText.textContent = this._text; // 使用存储的text值
         messageEl.appendChild(messageIcon);
@@ -169,10 +165,9 @@ export class PopupConfirm {
         buttons.appendChild(confirmBtn); // "是" button
 
         // Create "Don't Remind" button if text and id are provided
-        // Create "Don't Remind" button if text and id are provided
         if (dontRemindText && this.id) {
             const dontRemindBtn = document.createElement('button');
-            dontRemindBtn.textContent = dontRemindText; // e.g., "不再提示"
+            dontRemindBtn.textContent = dontRemindText || "لا تذكرني مجدداً"; // e.g., "不再提示"
             dontRemindBtn.style.width = '100%';
             dontRemindBtn.style.padding = '3px 12px';
             dontRemindBtn.style.background = 'none';
@@ -189,7 +184,7 @@ export class PopupConfirm {
         // Create "Always Confirm" button if text and id are provided
         if (alwaysConfirmText && this.id) {
             const alwaysConfirmBtn = document.createElement('button');
-            alwaysConfirmBtn.textContent = alwaysConfirmText; // e.g., "一直选是"
+            alwaysConfirmBtn.textContent = alwaysConfirmText || "اختر نعم دائماً"; // e.g., "一直选是"
             alwaysConfirmBtn.style.width = '100%';
             alwaysConfirmBtn.style.padding = '3px 12px';
             alwaysConfirmBtn.style.background = 'none';
@@ -278,21 +273,3 @@ export class PopupConfirm {
         }
     }
 }
-
-// 获取计算后的颜色值并确保完全不透明
-// function getSolidColor (target) {
-//     const colorValue = getComputedStyle(document.documentElement)
-//         .getPropertyValue(target).trim();
-//
-//     // 创建临时元素来解析颜色
-//     const tempEl = document.createElement('div');
-//     tempEl.style.color = colorValue;
-//     document.body.appendChild(tempEl);
-//
-//     // 获取计算后的 RGB 值
-//     const rgb = getComputedStyle(tempEl).color;
-//     document.body.removeChild(tempEl);
-//
-//     // 确保返回的是 rgb() 格式（不带 alpha）
-//     return rgb.startsWith('rgba') ? rgb.replace(/,[^)]+\)/, ')') : rgb;
-// }
