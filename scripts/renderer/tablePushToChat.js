@@ -336,22 +336,20 @@ function replaceTableToStatusTag(sheets) {
     };
 
     setTimeout(async () => {
-        // 此处注意竞态条件，可能在setTimeout执行前，上一轮tableStatusContainer还未被添加
-        const currentTableStatusContainer = document.querySelector('#tableStatusContainer');
-        if (currentTableStatusContainer) {
-            // 移除之前的事件监听器，防止重复添加 (虽然在这个场景下不太可能重复添加)
-            currentTableStatusContainer.removeEventListener('touchstart', touchstartHandler);
-            currentTableStatusContainer.removeEventListener('touchmove', touchmoveHandler);
-            currentTableStatusContainer.removeEventListener('touchend', touchendHandler);
-            currentTableStatusContainer?.remove(); // 移除旧的 tableStatusContainer
-        }
-
+        // 🚀 --- التعديل الذكي: إبادة كل الجداول القديمة من الشاشة --- 🚀
+        const oldTableContainers = document.querySelectorAll('#tableStatusContainer');
+        oldTableContainers.forEach(container => {
+            container.removeEventListener('touchstart', touchstartHandler);
+            container.removeEventListener('touchmove', touchmoveHandler);
+            container.removeEventListener('touchend', touchendHandler);
+            container.remove(); // مسح جميع النسخ المتكررة بقسوة
+        });
+        // 🚀 -------------------------------------------------------- 🚀
         // 在这里添加新的 tableStatusContainer
         const r = USER.tableBaseSetting.to_chat_container.replace(/\$0/g, `<tableStatus id="table_push_to_chat_sheets"></tableStatus>`);
         $(chatContainer).append(`<div class="wide100p" id="tableStatusContainer">${r}</div>`); // 添加新的 tableStatusContainer
         const tableStatusContainer = chatContainer?.querySelector('#table_push_to_chat_sheets');
         renderEditableSheetsDOM(sheets, tableStatusContainer);
-
         // 获取新创建的 tableStatusContainer
         const newTableStatusContainer = chatContainer?.querySelector('#tableStatusContainer');
         if (newTableStatusContainer) {
@@ -360,7 +358,6 @@ function replaceTableToStatusTag(sheets) {
             newTableStatusContainer.addEventListener('touchmove', touchmoveHandler, { passive: false });
             newTableStatusContainer.addEventListener('touchend', touchendHandler, { passive: false });
         }
-        // console.log('tableStatusContainer:', newTableStatusContainer);
     }, 0);
 }
 
