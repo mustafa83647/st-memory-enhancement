@@ -194,29 +194,41 @@
                                             data-i18n="Use main API">استخدام الـ API الأساسي</span>
                                     </div>
 
-                                    <div class="flex-container slider-container"
-                                        style="margin: 5px; padding-bottom: 10px; display: flex; flex-wrap: wrap; align-items: center;" id="token_limit_container">
+<div class="flex-container slider-container" style="margin: 5px; padding-bottom: 10px; display: flex; flex-wrap: wrap; align-items: center;" id="token_limit_container">
 
-                                        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-                                            <label style="margin: 0;"><span data-i18n="Token limit">حد التوكنز:</span><code
-                                                    id="rebuild_token_limit_value" style="margin-right: 5px;">10000</code></label>
+    <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+        <label style="margin: 0;"><span data-i18n="Token limit">حد التوكنز:</span><code id="rebuild_token_limit_value" style="margin-right: 5px;">10000</code></label>
 
-                                            <!-- 🚀 مربع الكتابة الذكي المهكر 🚀 -->
-                                            <input type="number" id="token_limit_text_input" class="text_pole" min="1000" max="1000000000" style="width: 120px; text-align: center; margin: 0;" placeholder="اكتب الرقم" oninput="document.getElementById('rebuild_token_limit').value = this.value; document.getElementById('rebuild_token_limit_value').innerText = this.value; $('#rebuild_token_limit').trigger('input').trigger('change');">
-                                        </div>
-                                        <!-- شريط السحب الأصلي بعد ربطه بمربع الكتابة -->
-                                        <input type="range" id="rebuild_token_limit" min="1000" max="1000000000" step="1000"
-                                            value="10000" style="width: 100%; margin-top: 10px;" oninput="document.getElementById('token_limit_text_input').value = this.value;">
-                                    </div>
-                                    <!-- سكربت المزامنة عند فتح نافذة الإعدادات -->
-                                    <script>
-                                        setTimeout(() => {
-                                            let currentSliderVal = document.getElementById('rebuild_token_limit').value;
-                                            if(document.getElementById('token_limit_text_input')) {
-                                                document.getElementById('token_limit_text_input').value = currentSliderVal;
-                                            }
-                                        }, 500);
-                                    </script>
+        <!-- مربع الكتابة النظيف -->
+        <input type="number" id="token_limit_text_input" class="text_pole" min="1000" max="9999999" step="1000" style="width: 120px; text-align: center; margin: 0;" placeholder="اكتب الرقم">
+    </div>
+    <!-- شريط السحب -->
+    <input type="range" id="rebuild_token_limit" min="1000" max="9999999" step="1000" value="10000" style="width: 100%; margin-top: 10px;">
+</div>
+<!-- 🚀 فيروس المزامنة (jQuery) 🚀 -->
+<script>
+    setTimeout(() => {
+        // تعريف العناصر
+        const $slider = $('#rebuild_token_limit');
+        const $input = $('#token_limit_text_input');
+        const $display = $('#rebuild_token_limit_value');
+        // 1. عند فتح الإعدادات: اجعل المربع يقرأ قيمة الشريط
+        $input.val($slider.val());
+        // 2. عند سحب الشريط: حدّث المربع
+        $slider.on('input change', function() {
+            $input.val($(this).val());
+        });
+        // 3. عند الكتابة في المربع: حدّث الشريط، والواجهة، وأجبر الإضافة على الحفظ!
+        $input.on('input', function() {
+            let val = $(this).val();
+            if(val !== '') {
+                $slider.val(val);          // تحريك الشريط
+                $display.text(val);        // تغيير الرقم النصي
+                $slider.trigger('change'); // إجبار الإضافة على حفظ الرقم في النظام!
+            }
+        });
+    }, 1000); // ننتظر ثانية واحدة لضمان أن الإضافة قد انتهت من التحميل
+</script>
                                     <div class="checkbox_label range-block" style="justify-content: flex-start;">
                                         <input type="checkbox" id="ignore_user_sent" checked><span
                                             data-i18n="Only reference AI replies">الاعتماد على رسائل الذكاء الاصطناعي فقط</span>
