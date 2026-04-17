@@ -185,7 +185,7 @@ export class Sheet extends SheetBase {
         return this.element;
     }
 
-        /**
+    /**
      * 保存表格数据
      * @returns {Sheet|boolean}
      */
@@ -204,16 +204,18 @@ export class Sheet extends SheetBase {
                 console.log("没有消息能承载hash_sheets数据，不予保存")
                 return this
             }
-            // 🚀 --- التعديل الذكي: مسح الجداول من كل الرسائل السابقة لمنع تضخم الذاكرة --- 🚀
+            // 🚀 --- التعديل الذكي (النسخة المصححة) --- 🚀
             const allChats = USER.getContext().chat;
             if (allChats && Array.isArray(allChats)) {
                 allChats.forEach(msg => {
-                    if (msg && msg.hash_sheets) {
-                        delete msg.hash_sheets; // نقوم بمسح الماضي تماماً
+                    // السحر هنا: نمسح الجداول من الماضي فقط (msg !== targetPiece)
+                    // وبذلك نحمي الرسالة الحالية من المسح الذاتي!
+                    if (msg && msg !== targetPiece && msg.hash_sheets) {
+                        delete msg.hash_sheets;
                     }
                 });
             }
-            // 🚀 ------------------------------------------------------------- 🚀
+            // 🚀 -------------------------------------- 🚀
             if (!targetPiece.hash_sheets) targetPiece.hash_sheets = {};
             targetPiece.hash_sheets[this.uid] = this.hashSheet?.map(row => row.map(hash => hash));
             console.log('保存表格数据', targetPiece, this.hashSheet);
